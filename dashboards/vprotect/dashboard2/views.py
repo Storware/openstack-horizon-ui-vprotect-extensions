@@ -1,11 +1,15 @@
-from django.views import generic
+import json
+import requests
+import yaml
 from django.http import HttpResponse, JsonResponse
-import requests, yaml, json
+from django.views import generic
+from http import HTTPStatus
 
 CONFIG = yaml.safe_load(open('/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/config.yaml', 'r'))
 VPROTECT_API_URL = CONFIG['REST_API_URL']
 USER = CONFIG['USER']
 PASSWORD = CONFIG['PASSWORD']
+
 
 class IndexView(generic.TemplateView):
     template_name = 'vprotect/dashboard2/index.html'
@@ -14,6 +18,7 @@ class IndexView(generic.TemplateView):
 class JsonView(generic.TemplateView):
     def get(self, request):
         return JsonResponse(request.body.decode('utf-8'), safe=False)
+
 
 def login():
     payload = {
@@ -27,11 +32,12 @@ def login():
 
 
 def is_json(myjson):
-  try:
-    json_object = json.dumps(myjson)
-  except ValueError as e:
-    return False
-  return True
+    try:
+        json_object = json.dumps(myjson)
+    except ValueError as e:
+        return False
+    return True
+
 
 def apiProxy(request):
     url = request.build_absolute_uri()
@@ -62,8 +68,11 @@ def apiProxy(request):
         response2['Content-Type'] = response.headers['Content-Type']
         response2['Content-Disposition'] = response.headers['Content-Disposition']
         return response2
+    elif response.status_code == HTTPStatus.NO_CONTENT:
+        return HttpResponse(response.content)
     else:
         return JsonResponse(response.json(), status=response.status_code, safe=False)
+
 
 def userInfo(request):
     payload = {
