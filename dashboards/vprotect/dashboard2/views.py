@@ -68,10 +68,10 @@ def apiProxy(request):
         response2['Content-Type'] = response.headers['Content-Type']
         response2['Content-Disposition'] = response.headers['Content-Disposition']
         return response2
-    elif response.status_code == HTTPStatus.NO_CONTENT:
-        return HttpResponse(response.content)
-    else:
+    elif response.status_code != HTTPStatus.NO_CONTENT and response.headers["content-type"].strip().startswith("application/json"):
         return JsonResponse(response.json(), status=response.status_code, safe=False)
+    else:
+        return HttpResponse(response.content)
 
 
 def userInfo(request):
