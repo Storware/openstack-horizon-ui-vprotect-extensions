@@ -56,11 +56,11 @@ def apiProxy(request):
 
     if request.method == "GET":
         response = login().get(path)
-    if request.method == "POST":
+    elif request.method == "POST":
         response = login().post(path, request.body, headers=headers)
-    if request.method == "PUT":
+    elif request.method == "PUT":
         response = login().put(path, request.body, headers=headers)
-    if request.method == "DELETE":
+    elif request.method == "DELETE":
         response = login().delete(path)
 
     if "download" in path:
@@ -68,10 +68,14 @@ def apiProxy(request):
         response2['Content-Type'] = response.headers['Content-Type']
         response2['Content-Disposition'] = response.headers['Content-Disposition']
         return response2
-    elif response.status_code != HTTPStatus.NO_CONTENT and response.headers["content-type"].strip().startswith("application/json"):
+    elif response.status_code != HTTPStatus.NO_CONTENT and is_json_content(response):
         return JsonResponse(response.json(), status=response.status_code, safe=False)
     else:
         return HttpResponse(response.content)
+
+
+def is_json_content(response):
+    return "content-type" in response.headers and response.headers["content-type"].strip().startswith("application/json")
 
 
 def userInfo(request):
