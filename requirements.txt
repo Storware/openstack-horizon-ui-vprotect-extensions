@@ -1,1 +1,1 @@
-horizon
+horizon >= 17.0.0

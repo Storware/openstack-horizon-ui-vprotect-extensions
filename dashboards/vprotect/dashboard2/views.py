@@ -3,12 +3,12 @@ import requests
 import yaml
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
-from http import HTTPStatus
 
 CONFIG = yaml.safe_load(open('/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/config.yaml', 'r'))
 VPROTECT_API_URL = CONFIG['REST_API_URL']
 USER = CONFIG['USER']
 PASSWORD = CONFIG['PASSWORD']
+HTTP_STATUS_NO_CONTENT = 204
 
 
 class IndexView(generic.TemplateView):
@@ -68,7 +68,7 @@ def apiProxy(request):
         response2['Content-Type'] = response.headers['Content-Type']
         response2['Content-Disposition'] = response.headers['Content-Disposition']
         return response2
-    elif response.status_code != HTTPStatus.NO_CONTENT and is_json_content(response):
+    elif response.status_code != HTTP_STATUS_NO_CONTENT and is_json_content(response):
         return JsonResponse(response.json(), status=response.status_code, safe=False)
     else:
         return HttpResponse(response.content)
