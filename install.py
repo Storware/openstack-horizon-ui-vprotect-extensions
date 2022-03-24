@@ -28,7 +28,7 @@ if len(sys.argv) >= 3:
 if len(sys.argv) >= 4:
     update_variable(sys.argv[3], 'PASSWORD')
 
-r = requests.get("https://github.com/Storware/ovirt-engine-ui-vprotect-extensions/releases/download/openstack/openstack.zip")
+r = requests.get("https://github.com/Storware/ovirt-engine-ui-vprotect-extensions/releases/download/4.3.0-11/openstack.zip")
 z = zipfile.ZipFile(io.BytesIO(r.content))
 z.extractall("dashboards/vprotect/static/vprotect")
 z.extractall("/usr/share/openstack-dashboard/static/vprotect")
