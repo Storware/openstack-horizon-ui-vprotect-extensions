@@ -17,7 +17,10 @@ class IndexView(generic.TemplateView):
 
 class JsonView(generic.TemplateView):
     def get(self, request):
-        return JsonResponse(request.body.decode('utf-8'), safe=False)
+        try:
+            return JsonResponse(request.body.decode('utf-8'), safe=False)
+        except DjangoUnicodeDecodeError:
+            return JsonResponse(request.body.decode('raw_unicode_escape'), safe=False)
 
 
 def login():
