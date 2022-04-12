@@ -73,7 +73,7 @@ def apiProxy(request):
     elif request.method == "DELETE":
         response = login().delete(path)
 
-    if "download" in path:
+    if "download" in path or "report-pdf" in path or "report-html" in path:
         response2 = HttpResponse(response.content)
         response2['Content-Type'] = response.headers['Content-Type']
         response2['Content-Disposition'] = response.headers['Content-Disposition']
