@@ -20,15 +20,14 @@ class IndexView(generic.TemplateView):
 class JsonView(generic.TemplateView):
     def get(self, request):
         try:
-            logging.warning('pre encoding')
+            logger = logging.getLogger('testing')
+            logger.warning('trying to guess the encoding')
             detected = chardet.detect(request.body)
+            logger.warning(detected)
+            logger.warning(detected['encoding'])
             encoding = detected['encoding']
-            logging.warning(detected)
-            logging.warning(encoding)
             return JsonResponse(request.body.decode(encoding), safe=False)
         except Exception as e:
-            logging.warning('JsonView error')
-            logging.warning(e)
             return JsonResponse(request.body, safe=False)
 
 def login():
