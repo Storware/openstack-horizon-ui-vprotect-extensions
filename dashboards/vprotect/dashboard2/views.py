@@ -18,8 +18,16 @@ class IndexView(generic.TemplateView):
 
 class JsonView(generic.TemplateView):
     def get(self, request):
-        encoding = chardet.detect(request.body)['encoding']
-        return JsonResponse(request.body.decode(encoding), safe=False)
+        try:
+            print('pre encoding')
+            detected = chardet.detect(request.body)
+            encoding = detected['encoding']
+            print(detected)
+            print(encoding)
+            return JsonResponse(request.body.decode(encoding), safe=False)
+        except Exception as e:
+            print('JsonView error')
+            print(e)
 
 
 def login():
