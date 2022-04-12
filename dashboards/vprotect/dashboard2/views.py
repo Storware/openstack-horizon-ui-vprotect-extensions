@@ -1,6 +1,7 @@
 import json
 import requests
 import yaml
+import chardet
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
 
@@ -17,10 +18,8 @@ class IndexView(generic.TemplateView):
 
 class JsonView(generic.TemplateView):
     def get(self, request):
-        try:
-            return JsonResponse(request.body.decode('utf-8'), safe=False)
-        except DjangoUnicodeDecodeError:
-            return JsonResponse(request.body.decode('raw_unicode_escape'), safe=False)
+        encoding = chardet.detect(request.body)['encoding']
+        return JsonResponse(request.body.decode(encoding), safe=False)
 
 
 def login():
