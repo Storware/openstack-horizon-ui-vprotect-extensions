@@ -28,7 +28,7 @@ class JsonView(generic.TemplateView):
         except Exception as e:
             print('JsonView error')
             print(e)
-
+            return JsonResponse(request.body, safe=False)
 
 def login():
     payload = {
