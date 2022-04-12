@@ -2,6 +2,7 @@ import json
 import requests
 import yaml
 import chardet
+import logging
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
 
@@ -19,15 +20,15 @@ class IndexView(generic.TemplateView):
 class JsonView(generic.TemplateView):
     def get(self, request):
         try:
-            print('pre encoding')
+            logging.warning('pre encoding')
             detected = chardet.detect(request.body)
             encoding = detected['encoding']
-            print(detected)
-            print(encoding)
+            logging.warning(detected)
+            logging.warning(encoding)
             return JsonResponse(request.body.decode(encoding), safe=False)
         except Exception as e:
-            print('JsonView error')
-            print(e)
+            logging.warning('JsonView error')
+            logging.warning(e)
             return JsonResponse(request.body, safe=False)
 
 def login():
