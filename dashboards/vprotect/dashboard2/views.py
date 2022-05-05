@@ -68,7 +68,7 @@ def apiProxy(request):
         response2['Content-Type'] = response.headers['Content-Type']
         response2['Content-Disposition'] = response.headers['Content-Disposition']
         return response2
-    elif response.status_code != HTTP_STATUS_NO_CONTENT and is_json_content(response):
+    elif (response.status_code != HTTP_STATUS_NO_CONTENT or response.method == "DELETE") and is_json_content(response):
         return JsonResponse(response.json(), status=response.status_code, safe=False)
     else:
         return HttpResponse(response.content)
