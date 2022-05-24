@@ -19,7 +19,7 @@ class TaskConsoleGroup(horizon.PanelGroup):
 
 class BackupAndRecovery(horizon.Dashboard):
     name = _("Backup & Recovery")
-    slug = "vprotect"
+    slug = "backup"
     panels = (DashboardGroup, VirtualEnvironmentsGroup, TaskConsoleGroup,)
     default_panel = "dashboard2"
 
