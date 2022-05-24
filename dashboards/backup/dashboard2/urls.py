@@ -12,9 +12,12 @@
 
 from django.conf.urls import url
 
-from openstack_dashboard.dashboards.vprotect.virtual_environments import views
+from openstack_dashboard.dashboards.backup.dashboard2 import views
 
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index')
+    url(r'^$', views.IndexView.as_view(), name='index'),
+    # url(r'^(?P<schedule_id>[^/]+)/edit-schedule$', views.JsonView.as_view(), name='edit-schedule'),
+    url(r'^api/user-info', views.userInfo, name='userInfo'),
+    url(r'^api', views.apiProxy, name='apiProxy'),
 ]

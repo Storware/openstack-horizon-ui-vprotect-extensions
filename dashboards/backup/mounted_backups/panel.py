@@ -10,11 +10,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.conf.urls import url
+from django.utils.translation import ugettext_lazy as _
 
-from openstack_dashboard.dashboards.vprotect.task_console import views
+import horizon
 
+from openstack_dashboard.dashboards.backup import dashboard
 
-urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index')
-]
+class MountedBackups(horizon.Panel):
+    name = _("Mounted Backups")
+    slug = "mounted_backups"
+
+dashboard.BackupAndRecovery.register(MountedBackups)

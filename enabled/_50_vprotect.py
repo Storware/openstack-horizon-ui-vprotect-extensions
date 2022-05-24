@@ -7,5 +7,5 @@ DISABLED = False
 # A list of applications to be added to INSTALLED_APPS.
 
 ADD_INSTALLED_APPS = [
-    'openstack_dashboard.dashboards.vprotect',
+    'openstack_dashboard.dashboards.backup',
 ]

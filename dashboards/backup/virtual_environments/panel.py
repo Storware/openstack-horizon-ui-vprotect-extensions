@@ -14,10 +14,10 @@ from django.utils.translation import ugettext_lazy as _
 
 import horizon
 
-from openstack_dashboard.dashboards.vprotect import dashboard
+from openstack_dashboard.dashboards.backup import dashboard
 
-class MountedBackups(horizon.Panel):
-    name = _("Reporting")
-    slug = "reporting"
+class VirtualEnvironments(horizon.Panel):
+    name = _("Instances")
+    slug = "virtual_environments"
 
-dashboard.BackupAndRecovery.register(MountedBackups)
+dashboard.BackupAndRecovery.register(VirtualEnvironments)

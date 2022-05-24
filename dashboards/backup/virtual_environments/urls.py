@@ -10,14 +10,11 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.utils.translation import ugettext_lazy as _
+from django.conf.urls import url
 
-import horizon
+from openstack_dashboard.dashboards.backup.virtual_environments import views
 
-from openstack_dashboard.dashboards.vprotect import dashboard
 
-class Dashboard2(horizon.Panel):
-    name = _("Dashboard")
-    slug = "dashboard2"
-
-dashboard.BackupAndRecovery.register(Dashboard2)
+urlpatterns = [
+    url(r'^$', views.IndexView.as_view(), name='index')
+]
