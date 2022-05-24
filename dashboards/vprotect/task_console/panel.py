@@ -20,4 +20,4 @@ class TaskConsole(horizon.Panel):
     name = _("Task Console")
     slug = "task_console"
 
-dashboard.VProtect.register(TaskConsole)
+dashboard.BackupAndRecovery.register(TaskConsole)

@@ -20,4 +20,4 @@ class Dashboard2(horizon.Panel):
     name = _("Dashboard")
     slug = "dashboard2"
 
-dashboard.VProtect.register(Dashboard2)
+dashboard.BackupAndRecovery.register(Dashboard2)

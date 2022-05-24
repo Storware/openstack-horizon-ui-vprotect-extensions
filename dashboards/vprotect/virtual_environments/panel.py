@@ -20,4 +20,4 @@ class VirtualEnvironments(horizon.Panel):
     name = _("Instances")
     slug = "virtual_environments"
 
-dashboard.VProtect.register(VirtualEnvironments)
+dashboard.BackupAndRecovery.register(VirtualEnvironments)

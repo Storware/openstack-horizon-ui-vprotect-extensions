@@ -20,4 +20,4 @@ class PoliciesAndSchedules(horizon.Panel):
     name = _("Backup SLAs")
     slug = "policies_and_schedules"
 
-dashboard.VProtect.register(PoliciesAndSchedules)
+dashboard.BackupAndRecovery.register(PoliciesAndSchedules)

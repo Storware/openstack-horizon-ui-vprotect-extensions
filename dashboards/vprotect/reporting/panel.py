@@ -20,4 +20,4 @@ class MountedBackups(horizon.Panel):
     name = _("Reporting")
     slug = "reporting"
 
-dashboard.VProtect.register(MountedBackups)
+dashboard.BackupAndRecovery.register(MountedBackups)
