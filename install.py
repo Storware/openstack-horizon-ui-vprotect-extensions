@@ -65,5 +65,5 @@ if VERSION_DATA.get('assets'):
         os.makedirs(path)
 
     copy_tree('dashboards/backup/', '/usr/share/openstack-dashboard/openstack_dashboard/dashboards/backup/')
-    shutil.copyfile('enabled/_50_vprotect.py', '/usr/share/openstack-dashboard/openstack_dashboard/enabled/_50_vprotect.py')
+    shutil.copyfile('enabled/_50_backup.py', '/usr/share/openstack-dashboard/openstack_dashboard/enabled/_50_backup.py')
 
