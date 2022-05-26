@@ -21,7 +21,7 @@ def update_variable(state, variable):
 def getReleaseLabel(release):
     return release['name'] + " " + release['body']
 
-CONFIG_PATH = 'dashboards/vprotect/config.yaml'
+CONFIG_PATH = 'dashboards/backup/config.yaml'
 RELEASES_API = 'https://api.github.com/repos/Storware/ovirt-engine-ui-vprotect-extensions/releases'
 VERSION_DATA = None
 
@@ -56,14 +56,14 @@ if VERSION_DATA.get('assets'):
     package = requests.get(openstackUrl)
 
     z = zipfile.ZipFile(io.BytesIO(package.content))
-    z.extractall("dashboards/vprotect/static/vprotect")
-    z.extractall("/usr/share/openstack-dashboard/static/vprotect")
+    z.extractall("dashboards/backup/static/backup")
+    z.extractall("/usr/share/openstack-dashboard/static/backup")
 
     path = '/usr/share/openstack-dashboard/openstack_dashboard/enabled'
     isExist = os.path.exists(path)
     if not isExist:
         os.makedirs(path)
 
-    copy_tree('dashboards/vprotect/', '/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/')
-    shutil.copyfile('enabled/_50_vprotect.py', '/usr/share/openstack-dashboard/openstack_dashboard/enabled/_50_vprotect.py')
+    copy_tree('dashboards/backup/', '/usr/share/openstack-dashboard/openstack_dashboard/dashboards/backup/')
+    shutil.copyfile('enabled/_50_backup.py', '/usr/share/openstack-dashboard/openstack_dashboard/enabled/_50_backup.py')
 

@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+
+{% load horizon %}
+{% jstemplate %}
+
+{% block sidebar %}
+  {% include 'horizon/common/_sidebar.html' %}
+{% endblock %}
+
+{% block main %}
+<!--  {% include "horizon/_messages.html" %}-->
+  {% block backup_main %}{% endblock %}
+{% endblock %}
+{% endjstemplate %}
