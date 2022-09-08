@@ -17,7 +17,7 @@ import horizon
 from openstack_dashboard.dashboards.vprotect import dashboard
 
 class Dashboard2(horizon.Panel):
-    name = "Dashboard"
+    name = _("Dashboard")
     slug = "dashboard2"
 
 dashboard.VProtect.register(Dashboard2)

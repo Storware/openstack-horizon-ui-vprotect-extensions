@@ -24,7 +24,7 @@ class SettingsGroup(horizon.PanelGroup):
 
 
 class VProtect(horizon.Dashboard):
-    name = _("Backup & Recovery")
+    name = _("Backup?&?Recovery")
     slug = "vprotect"
     panels = (DashboardGroup, VirtualEnvironmentsGroup, TaskConsoleGroup, SettingsGroup,)
     default_panel = "dashboard2"
