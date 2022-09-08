@@ -17,7 +17,7 @@ import horizon
 from openstack_dashboard.dashboards.vprotect import dashboard
 
 class TaskConsole(horizon.Panel):
-    name = _("Task Console")
+    name = "Task Console"
     slug = "task_console"
 
 dashboard.VProtect.register(TaskConsole)

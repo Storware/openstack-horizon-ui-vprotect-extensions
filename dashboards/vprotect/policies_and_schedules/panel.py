@@ -17,7 +17,7 @@ import horizon
 from openstack_dashboard.dashboards.vprotect import dashboard
 
 class PoliciesAndSchedules(horizon.Panel):
-    name = _("Backup SLAs")
+    name = "Backup SLAs"
     slug = "policies_and_schedules"
 
 dashboard.VProtect.register(PoliciesAndSchedules)

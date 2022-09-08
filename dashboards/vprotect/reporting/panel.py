@@ -17,7 +17,7 @@ import horizon
 from openstack_dashboard.dashboards.vprotect import dashboard
 
 class MountedBackups(horizon.Panel):
-    name = _("Reporting")
+    name = "Reporting"
     slug = "reporting"
 
 dashboard.VProtect.register(MountedBackups)

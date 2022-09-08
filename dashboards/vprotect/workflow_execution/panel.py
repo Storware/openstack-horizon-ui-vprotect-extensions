@@ -17,7 +17,7 @@ import horizon
 from openstack_dashboard.dashboards.vprotect import dashboard
 
 class WorkflowExecution(horizon.Panel):
-    name = _("Workflow Execution")
+    name = "Workflow Execution"
     slug = "workflow_execution"
 
 dashboard.VProtect.register(WorkflowExecution)
