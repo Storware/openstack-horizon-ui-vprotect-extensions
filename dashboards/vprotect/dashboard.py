@@ -24,12 +24,41 @@ class SettingsGroup(horizon.PanelGroup):
 
 
 class VProtect(horizon.Dashboard):
-    name = _("Backup?&?Recovery")
+    name = _("Backup & Recovery")
     slug = "vprotect"
     panels = (DashboardGroup, VirtualEnvironmentsGroup, TaskConsoleGroup, SettingsGroup,)
     default_panel = "dashboard2"
 
+class Dashboard2(horizon.Panel):
+    name = _("Dashboard")
+    slug = "dashboard2"
 
+class Mailing(horizon.Panel):
+    name = _("Mailing")
+    slug = "mailing"
 
+class MountedBackups(horizon.Panel):
+    name = _("Mounted Backups")
+    slug = "mounted_backups"
+
+class PoliciesAndSchedules(horizon.Panel):
+    name = _("Backup SLAs")
+    slug = "policies_and_schedules"
+
+class MountedBackups(horizon.Panel):
+    name = _("Reporting")
+    slug = "reporting"
+
+class TaskConsole(horizon.Panel):
+    name = _("Task Console")
+    slug = "task_console"
+
+class VirtualEnvironments(horizon.Panel):
+    name = _("Instances")
+    slug = "virtual_environments"
+
+class WorkflowExecution(horizon.Panel):
+    name = _("Workflow Execution")
+    slug = "workflow_execution"
 
 horizon.register(VProtect)
