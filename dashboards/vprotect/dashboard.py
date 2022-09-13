@@ -18,7 +18,7 @@ class TaskConsoleGroup(horizon.PanelGroup):
 class SettingsGroup(horizon.PanelGroup):
     slug = "settingsGroup"
     name = "Settings"
-    panels = ('settings')
+    panels = ('mailing',)
 
 
 class VProtect(horizon.Dashboard):
