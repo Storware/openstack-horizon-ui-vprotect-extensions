@@ -15,7 +15,7 @@ import horizon
 from openstack_dashboard.dashboards.vprotect import dashboard
 
 class MailingSettings(horizon.Panel):
-    name = "Mailing"
+    name = "Mailing but Settings"
     slug = "settings"
 
 dashboard.VProtect.register(MailingSettings)
