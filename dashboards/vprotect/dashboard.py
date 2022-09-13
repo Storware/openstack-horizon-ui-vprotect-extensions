@@ -1,17 +1,5 @@
 import horizon
 
-
-
-
-
-
-
-
-
-
-
-
-
 class VirtualEnvironmentsGroup(horizon.PanelGroup):
     slug = "virtualEnvironmentsGroup"
     name = "Virtual Environments"
@@ -30,7 +18,7 @@ class TaskConsoleGroup(horizon.PanelGroup):
 class SettingsGroup(horizon.PanelGroup):
     slug = "settingsGroup"
     name = "Settings"
-    panels = ('mailing','settings')
+    panels = ('settings',)
 
 
 class VProtect(horizon.Dashboard):
