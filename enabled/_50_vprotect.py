@@ -11,4 +11,4 @@ ADD_INSTALLED_APPS = [
 ]
 
 # https://bugs.launchpad.net/horizon/+bug/1853651
-WEBROOT = '/vprotect/dashboard'
+WEBROOT = '/dashboard/vprotect'
