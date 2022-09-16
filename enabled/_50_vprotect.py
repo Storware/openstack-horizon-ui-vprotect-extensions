@@ -9,3 +9,6 @@ DISABLED = False
 ADD_INSTALLED_APPS = [
     'openstack_dashboard.dashboards.vprotect',
 ]
+
+# https://bugs.launchpad.net/horizon/+bug/1853651
+WEBROOT = '/vprotect/dashboard'
