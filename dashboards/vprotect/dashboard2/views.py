@@ -74,7 +74,7 @@ def apiProxy(request):
             jsonResponse['X-Total-Count'] = response.headers['X-Total-Count']
         jsonResponse['Project-Uuid'] = request.user.tenant_id
         jsonResponse['User-Id'] = request.user.id
-        jsonResponse['User-Name'] = 'not found'
+        jsonResponse['User-Name'] = request.user.username
         return jsonResponse
     else:
         return HttpResponse(response.content)
