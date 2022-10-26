@@ -73,7 +73,7 @@ def apiProxy(request):
         if 'X-Total-Count' in response.headers:
             jsonResponse['X-Total-Count'] = response.headers['X-Total-Count']
         jsonResponse['Project-Uuid'] = request.user.tenant_id
-        jsonResponse['User-Id'] = 'not found'
+        jsonResponse['User-Id'] = request.user.id
         jsonResponse['User-Name'] = 'not found'
         return jsonResponse
     else:
