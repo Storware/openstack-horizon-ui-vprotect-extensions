@@ -52,7 +52,7 @@ def apiProxy(request):
     else:
         queryParamSeparator = "&"
 
-    path = VPROTECT_API_URL + vprotectPath + queryParamSeparator + "project-uuid=" + request.user.tenant_id
+    path = VPROTECT_API_URL + vprotectPath + queryParamSeparator + "project-uuid=" + request.user.tenant_id + queryParamSeparator + "user-uuid=" + request.user.id + queryParamSeparator + "user-name=" + request.user.name
 
     if request.method == "GET":
         response = login().get(path)
@@ -72,9 +72,6 @@ def apiProxy(request):
         jsonResponse = JsonResponse(response.json(), status=response.status_code, safe=False)
         if 'X-Total-Count' in response.headers:
             jsonResponse['X-Total-Count'] = response.headers['X-Total-Count']
-        jsonResponse['Project-Uuid'] = request.user.tenant_id
-        jsonResponse['User-Id'] = request.user.id
-        jsonResponse['User-Name'] = request.user.username
         return jsonResponse
     else:
         return HttpResponse(response.content)
