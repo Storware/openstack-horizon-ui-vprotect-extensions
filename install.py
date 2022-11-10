@@ -23,8 +23,6 @@ def install_dashboard_menu(ver = '5.1'):
     #   if ver not in ['5.1', '5.0']:
     #       shutil.copyfile('dashboard_5.1.py', 'dashboards/vprotect/dashboard.py')
 
-    print (ver)
-
 def update_variable(state, variable):
     with open(CONFIG_PATH) as f:
         doc = yaml.safe_load(f)
