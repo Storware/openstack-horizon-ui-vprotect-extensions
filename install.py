@@ -7,16 +7,23 @@ import sys
 import yaml
 import requests, zipfile, io
 from distutils.dir_util import copy_tree
-from pick import pick
 
-def install_dashboard_menu(ver: str = '5.1'):
+
+CONFIG_PATH = 'dashboards/vprotect/config.yaml'
+RELEASES_API = 'https://api.github.com/repos/Storware/ovirt-engine-ui-vprotect-extensions/releases'
+VERSION_DATA = None
+
+
+def install_dashboard_menu(ver = '5.1'):
     try:
-        shutil.copyfile(f'dashboard_{ver}.py', 'dashboards/vprotect/dashboard.py')
+        shutil.copyfile('dashboard_'+ver+'.py', 'dashboards/vprotect/dashboard.py')
     except FileNotFoundError:
         raise FileNotFoundError('Plugin version not recognised - release name should start with "v5.1" or "v5.0".')
     # other solution in case of different versions in the future:
     #   if ver not in ['5.1', '5.0']:
     #       shutil.copyfile('dashboard_5.1.py', 'dashboards/vprotect/dashboard.py')
+
+    print (ver)
 
 def update_variable(state, variable):
     with open(CONFIG_PATH) as f:
@@ -29,10 +36,6 @@ def update_variable(state, variable):
 
 def getReleaseLabel(release):
     return release['name']
-
-CONFIG_PATH = 'dashboards/vprotect/config.yaml'
-RELEASES_API = 'https://api.github.com/repos/Storware/ovirt-engine-ui-vprotect-extensions/releases'
-VERSION_DATA = None
 
 if len(sys.argv) >= 2:
     update_variable(sys.argv[1], 'REST_API_URL')
@@ -51,20 +54,16 @@ if len(sys.argv) >= 5:
     if r.json().get('message'):
         print(r.json()['message'])
     else:
+        install_dashboard_menu(sys.argv[4][0:3])
         VERSION_DATA = r.json()
 else:
     versions = requests.get(RELEASES_API)
-    versionsNames = map(getReleaseLabel, versions.json())
-    result = pick(list(versionsNames), "Select a version", indicator='=>', multiselect=False)
-    if type(result) == list:
-        option, index = result[0]
-    else:
-        option, index = result
+    versionsNames = list(map(getReleaseLabel, versions.json()))
+    result = versionsNames[0]
 
-    if option:
-        install_dashboard_menu(option[1:4])
-        VERSION_DATA = versions.json()[index]
-
+    if result:
+        install_dashboard_menu(result[1:4])
+        VERSION_DATA = versions.json()[0]
 
 if VERSION_DATA.get('assets'):
     openstackUrl = VERSION_DATA['assets'][0]['browser_download_url']
@@ -81,4 +80,3 @@ if VERSION_DATA.get('assets'):
 
     copy_tree('dashboards/vprotect/', '/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/')
     shutil.copyfile('enabled/_50_vprotect.py', '/usr/share/openstack-dashboard/openstack_dashboard/enabled/_50_vprotect.py')
-
