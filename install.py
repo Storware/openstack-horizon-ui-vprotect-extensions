@@ -51,7 +51,10 @@ versionsNames = list(map(getReleaseLabel, versions.json()))
 if len(sys.argv) >= 5:
     index = 0
     if sys.argv[4] != "latest":
-        result = next(x for x in versionsNames if sys.argv[4] in x)
+        try:
+            result = next(x for x in versionsNames if sys.argv[4] in x)
+        except StopIteration:
+            raise ValueError('Version %s not found!' % sys.argv[4])
     else:
         result = versionsNames[0]
     index = versionsNames.index(result)
