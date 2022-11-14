@@ -23,8 +23,6 @@ def install_dashboard_menu(ver = '5.1'):
     #   if ver not in ['5.1', '5.0']:
     #       shutil.copyfile('dashboard_5.1.py', 'dashboards/vprotect/dashboard.py')
 
-    print (ver)
-
 def update_variable(state, variable):
     with open(CONFIG_PATH) as f:
         doc = yaml.safe_load(f)
@@ -35,7 +33,7 @@ def update_variable(state, variable):
         yaml.safe_dump(doc, f, default_flow_style=False)
 
 def getReleaseLabel(release):
-    return release['name']
+    return release['name'][1:]
 
 if len(sys.argv) >= 2:
     update_variable(sys.argv[1], 'REST_API_URL')
@@ -46,25 +44,30 @@ if len(sys.argv) >= 3:
 if len(sys.argv) >= 4:
     update_variable(sys.argv[3], 'PASSWORD')
 
+versions = requests.get(RELEASES_API)
+versionsNames = list(map(getReleaseLabel, versions.json()))
+
 # If the version of package is provided
 if len(sys.argv) >= 5:
-    requestApi = RELEASES_API + (sys.argv[4] == 'latest' and "/latest" or "/tags/" + sys.argv[4])
-
-    r = requests.get(requestApi)
-    if r.json().get('message'):
-        print(r.json()['message'])
+    index = 0
+    if sys.argv[4] != "latest":
+        result = next(x for x in versionsNames if sys.argv[4] in x)
     else:
-        install_dashboard_menu(sys.argv[4][0:3])
-        VERSION_DATA = r.json()
-else:
-    versions = requests.get(RELEASES_API)
-    versionsNames = list(map(getReleaseLabel, versions.json()))
-    result = versionsNames[0]
+        result = versionsNames[0]
+    index = versionsNames.index(result)
 
+    if versions.json()[index].get('message'):
+        print(versions.json()[index]['message'])
+    else:
+        install_dashboard_menu(result[0:3])
+        VERSION_DATA = versions.json()[index]
+else:
+    result = versionsNames[0]
     if result:
         install_dashboard_menu(result[1:4])
         VERSION_DATA = versions.json()[0]
 
+print VERSION_DATA['tag_name']
 if VERSION_DATA.get('assets'):
     openstackUrl = VERSION_DATA['assets'][0]['browser_download_url']
     package = requests.get(openstackUrl)
