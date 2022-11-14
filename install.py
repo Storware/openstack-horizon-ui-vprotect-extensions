@@ -67,7 +67,6 @@ else:
         install_dashboard_menu(result[1:4])
         VERSION_DATA = versions.json()[0]
 
-print VERSION_DATA['tag_name']
 if VERSION_DATA.get('assets'):
     openstackUrl = VERSION_DATA['assets'][0]['browser_download_url']
     package = requests.get(openstackUrl)
