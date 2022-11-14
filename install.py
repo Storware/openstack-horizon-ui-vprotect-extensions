@@ -64,7 +64,7 @@ if len(sys.argv) >= 5:
 else:
     result = versionsNames[0]
     if result:
-        install_dashboard_menu(result[1:4])
+        install_dashboard_menu(result[0:3])
         VERSION_DATA = versions.json()[0]
 
 if VERSION_DATA.get('assets'):
