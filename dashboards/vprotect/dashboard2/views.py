@@ -44,7 +44,7 @@ def apiProxy(request):
     pathIndex = url.find("api")
     vprotectPath = url[pathIndex+3:]
     response = None
-    headers = {'content-type': 'application/json'}
+    headers = {'content-type': 'application/json', '3rd_party': 'HORIZON', '3rd_party_project': request.user.tenant_id}
     queryParamSeparator = None
 
     if vprotectPath.find("?") == -1:
