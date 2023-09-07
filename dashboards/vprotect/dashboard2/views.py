@@ -67,15 +67,15 @@ def apiProxy(request):
         response2 = HttpResponse(response.content)
         response2['Content-Type'] = response.headers['Content-Type']
         response2['Content-Disposition'] = response.headers['Content-Disposition']        
-        response2['3d_party'] = 'HORIZON'
-        response2['3d_party_project'] = request.user.tenant_id
+        response2['3rd_party'] = 'HORIZON'
+        response2['3rd_party_project'] = request.user.tenant_id
         return response2
     elif response.status_code != HTTP_STATUS_NO_CONTENT and is_json_content(response):
         jsonResponse = JsonResponse(response.json(), status=response.status_code, safe=False)
         if 'X-Total-Count' in response.headers:
             jsonResponse['X-Total-Count'] = response.headers['X-Total-Count']
-        jsonResponse['3d_party'] = 'HORIZON'
-        jsonResponse['3d_party_project'] = request.user.tenant_id
+        jsonResponse['3rd_party'] = 'HORIZON'
+        jsonResponse['3rd_party_project'] = request.user.tenant_id
         return jsonResponse
     else:
         return HttpResponse(response.content)
