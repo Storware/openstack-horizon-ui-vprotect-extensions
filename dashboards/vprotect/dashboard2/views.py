@@ -45,6 +45,7 @@ def apiProxy(request):
     vprotectPath = url[pathIndex+3:]
     response = None
     headers = {'content-type': 'application/json', '3rd-party': 'HORIZON', '3rd-party-project': request.user.tenant_id}
+    headers3rd = {'3rd-party': 'HORIZON', '3rd-party-project': request.user.tenant_id}
     queryParamSeparator = None
 
     if vprotectPath.find("?") == -1:
@@ -55,13 +56,13 @@ def apiProxy(request):
     path = VPROTECT_API_URL + vprotectPath + queryParamSeparator + "project-uuid=" + request.user.tenant_id
 
     if request.method == "GET":
-        response = login().get(path)
+        response = login().get(path, headers=headers3rd)
     elif request.method == "POST":
         response = login().post(path, request.body, headers=headers)
     elif request.method == "PUT":
         response = login().put(path, request.body, headers=headers)
     elif request.method == "DELETE":
-        response = login().delete(path)
+        response = login().delete(path, headers=headers3rd)
 
     if is_endpoint_contentable(path):
         response2 = HttpResponse(response.content)
