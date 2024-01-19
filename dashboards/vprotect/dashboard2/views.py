@@ -3,7 +3,7 @@ import requests
 import yaml
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
-from sbr_utils import project_uuid_removal
+import re
 
 CONFIG = yaml.safe_load(open('/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/config.yaml', 'r'))
 VPROTECT_API_URL = CONFIG['REST_API_URL']
@@ -98,3 +98,9 @@ def userInfo(request):
     response = login().post(VPROTECT_API_URL + '/session/login', json.dumps(payload), headers=headers)
 
     return JsonResponse(response.json(), status=response.status_code, safe=False)
+
+
+
+
+def project_uuid_removal(url):
+    return re.sub(r'&?project-uuid=[^&]*', '', url)
