@@ -40,6 +40,10 @@ def is_json(myjson):
     return True
 
 
+def project_uuid_removal(url):
+    return re.sub(r'&?project-uuid=[^&]*', '', url)
+
+
 def apiProxy(request):
     url = request.build_absolute_uri()
     pathIndex = url.find("api")
@@ -98,9 +102,3 @@ def userInfo(request):
     response = login().post(VPROTECT_API_URL + '/session/login', json.dumps(payload), headers=headers)
 
     return JsonResponse(response.json(), status=response.status_code, safe=False)
-
-
-
-
-def project_uuid_removal(url):
-    return re.sub(r'&?project-uuid=[^&]*', '', url)
