@@ -3,6 +3,7 @@ import requests
 import yaml
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
+from utils import project_uuid_removal
 
 CONFIG = yaml.safe_load(open('/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/config.yaml', 'r'))
 VPROTECT_API_URL = CONFIG['REST_API_URL']
@@ -53,7 +54,7 @@ def apiProxy(request):
     else:
         queryParamSeparator = "&"
 
-    path = VPROTECT_API_URL + vprotectPath + queryParamSeparator + "project-uuid=" + request.user.tenant_id
+    path = project_uuid_removal(VPROTECT_API_URL) + project_uuid_removal(vprotectPath) + queryParamSeparator + "project-uuid=" + request.user.tenant_id
 
     if request.method == "GET":
         response = login().get(path, headers=headers3rd)
