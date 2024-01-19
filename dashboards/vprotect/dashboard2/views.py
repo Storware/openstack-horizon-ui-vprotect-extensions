@@ -3,7 +3,7 @@ import requests
 import yaml
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
-from utils import project_uuid_removal
+from sbr_utils import project_uuid_removal
 
 CONFIG = yaml.safe_load(open('/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/config.yaml', 'r'))
 VPROTECT_API_URL = CONFIG['REST_API_URL']
