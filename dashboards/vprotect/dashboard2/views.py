@@ -43,16 +43,9 @@ def is_json(myjson):
 
 
 def remove_project_query_params(url):
-    # Rozdzielenie URL na bazową część i część z parametrami
     base_url, _, params = url.partition('?')
-
-    # Dekodowanie części z parametrami
     decoded_params = unquote(params)
-
-    # Usunięcie wszystkich parametrów zawierających słowo "project"
     modified_params = re.sub(r'&?[^&]*project[^&]*', '', decoded_params)
-
-    # Ponowne połączenie bazowej części URL z zmodyfikowanymi parametrami
     return base_url + '?' + modified_params if modified_params else base_url
 
 
