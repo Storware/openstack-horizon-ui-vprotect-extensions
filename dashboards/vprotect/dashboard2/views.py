@@ -3,6 +3,7 @@ import requests
 import yaml
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
+from urllib.parse import unquote
 import re
 
 CONFIG = yaml.safe_load(open('/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/config.yaml', 'r'))
@@ -40,8 +41,20 @@ def is_json(myjson):
     return True
 
 
-def project_uuid_removal(url):
-    return re.sub(r'&?project-uuid=[^&]*', '', url)
+
+def remove_project_query_params(url):
+    # Rozdzielenie URL na bazową część i część z parametrami
+    base_url, _, params = url.partition('?')
+
+    # Dekodowanie części z parametrami
+    decoded_params = unquote(params)
+
+    # Usunięcie wszystkich parametrów zawierających słowo "project"
+    modified_params = re.sub(r'&?[^&]*project[^&]*', '', decoded_params)
+
+    # Ponowne połączenie bazowej części URL z zmodyfikowanymi parametrami
+    return base_url + '?' + modified_params if modified_params else base_url
+
 
 
 def apiProxy(request):
@@ -58,7 +71,7 @@ def apiProxy(request):
     else:
         queryParamSeparator = "&"
 
-    path = project_uuid_removal(VPROTECT_API_URL) + project_uuid_removal(vprotectPath) + queryParamSeparator + "project-uuid=" + request.user.tenant_id
+    path = remove_project_query_params(VPROTECT_API_URL) + remove_project_query_params(vprotectPath) + queryParamSeparator + "project-uuid=" + request.user.tenant_id
 
     if request.method == "GET":
         response = login().get(path, headers=headers3rd)
