@@ -4,7 +4,6 @@ import yaml
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
 from urllib.parse import unquote
-import re
 
 CONFIG = yaml.safe_load(open('/usr/share/openstack-dashboard/openstack_dashboard/dashboards/vprotect/config.yaml', 'r'))
 VPROTECT_API_URL = CONFIG['REST_API_URL']
@@ -45,7 +44,9 @@ def is_json(myjson):
 def remove_project_query_params(url):
     base_url, _, params = url.partition('?')
     decoded_params = unquote(params)
-    modified_params = re.sub(r'&?[^&]*project[^&]*', '', decoded_params)
+    param_pairs = decoded_params.split('&')
+    filtered_params = [param for param in param_pairs if 'project' not in param.split('=')[0]]
+    modified_params = '&'.join(filtered_params)
     return base_url + '?' + modified_params if modified_params else base_url
 
 
