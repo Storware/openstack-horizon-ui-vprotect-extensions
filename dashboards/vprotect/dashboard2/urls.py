@@ -10,14 +10,14 @@
 # License for the specific language governing permissions and limitations
 # under the License.
 
-from django.conf.urls import url
+from django.urls import re_path
 
 from openstack_dashboard.dashboards.vprotect.dashboard2 import views
 
 
 urlpatterns = [
-    url(r'^$', views.IndexView.as_view(), name='index'),
-    # url(r'^(?P<schedule_id>[^/]+)/edit-schedule$', views.JsonView.as_view(), name='edit-schedule'),
-    url(r'^api/user-info', views.userInfo, name='userInfo'),
-    url(r'^api', views.apiProxy, name='apiProxy'),
+    re_path(r'^$', views.IndexView.as_view(), name='index'),
+    # re_path(r'^(?P<schedule_id>[^/]+)/edit-schedule$', views.JsonView.as_view(), name='edit-schedule'),
+    re_path(r'^api/user-info', views.userInfo, name='userInfo'),
+    re_path(r'^api', views.apiProxy, name='apiProxy'),
 ]
