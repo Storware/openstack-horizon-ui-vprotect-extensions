@@ -11,7 +11,6 @@
 # under the License.
 
 from django.urls import re_path
-
 from openstack_dashboard.dashboards.vprotect.task_console import views
 
 
