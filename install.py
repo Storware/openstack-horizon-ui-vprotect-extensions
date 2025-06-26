@@ -55,6 +55,11 @@ if len(sys.argv) >= 5:
             raise ValueError('Version %s not found!' % sys.argv[4])
     else:
         result = versionsNames[0]
+
+    while not result[0].isdigit():
+        index += 1
+        result = versionsNames[index]
+
     index = versionsNames.index(result)
 
     if versions.json()[index].get('message'):
