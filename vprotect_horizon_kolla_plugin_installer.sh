@@ -1,11 +1,11 @@
 #!/bin/bash
 # ====================================================================================
 # Script Name	: vprotect_horizon_kolla_plugin_installer.sh
-# Version	: 0.5
+# Version	: 0.6
 # Author	: Tomasz Lipczyński
 # Email		: t.lipczynski@storware.eu
 # Created	: 2026-02-04
-# Updated	: 2026-02-10
+# Updated	: 2026-02-11
 # Description	: vProtect Horizon plugin installation tool. Designed to use inside
 # 		  the horizon pod with kolla.
 # ====================================================================================
@@ -117,14 +117,6 @@ get_sbr_credentials() {
 	read -p "Type your SBR username: " sbr_user
 	read -sp "Type your SBR password: " sbr_pass
 	echo
-}
-
-is_ip() {
-	if [[ "$sbr_hostname" =~ ^([0-9]{1,3}\.){3}[0-9]{1,3}$ ]]; then
-	  return 0
-	else
-	  return 1
-	fi
 }
 
 get_certificate() {
@@ -267,11 +259,6 @@ install() {
 
 	echo -e "${GREEN}${BOLD}Installation completed."
 	sleep 1
-
-	if ! is_ip; then
-		echo -e "${CYAN}After restart, remember to put ${YELLOW}${sbr_hostname} ${CYAN}inside ${YELLOW}/etc/hosts${CYAN}.${NC}"
-		echo -e "${YELLOW} echo \"<SBR IP> ${sbr_hostname}\" >> /etc/hosts"
-	fi
 
 	echo
 	echo -en "${CYAN}Restarting apache2 in 3 seconds${NC}"
