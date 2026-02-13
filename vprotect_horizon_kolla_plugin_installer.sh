@@ -1,13 +1,13 @@
 #!/bin/bash
 # ====================================================================================
 # Script Name	: vprotect_horizon_kolla_plugin_installer.sh
-# Version	: 0.6
-# Author	: Tomasz Lipczyński
-# Email		: t.lipczynski@storware.eu
-# Created	: 2026-02-04
-# Updated	: 2026-02-11
+# Version		: 0.6
+# Author		: Tomasz Lipczyński
+# Email			: t.lipczynski@storware.eu
+# Created		: 2026-02-04
+# Updated		: 2026-02-11
 # Description	: vProtect Horizon plugin installation tool. Designed to use inside
-# 		  the horizon pod with kolla.
+# 		  			the horizon pod with kolla.
 # ====================================================================================
 #
 IS_STATIC_FILES_UPDATE=1
