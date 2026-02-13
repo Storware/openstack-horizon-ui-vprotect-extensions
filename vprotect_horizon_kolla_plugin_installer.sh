@@ -240,7 +240,7 @@ install() {
 		cd /tmp/vprotect/vprotect
 		sed -i "s/dashboard\/static\/vprotect/static\/vprotect/g" index.*
 		sed -i "s/dashboard\/vprotect/vprotect/g" index.*
-		echo -e "${CYAN}${BOLD}Static files updated for Caracal.${NC}"
+		echo -e "${CYAN}${BOLD}Static files updated.${NC}"
 	fi
 
 	if ! [[ -d "$KOLLA_WORKING_DIR" ]]; then
