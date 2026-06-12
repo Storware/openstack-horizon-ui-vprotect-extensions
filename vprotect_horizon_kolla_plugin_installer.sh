@@ -1,7 +1,7 @@
 #!/bin/bash
 # ====================================================================================
 # Script Name	: vprotect_horizon_kolla_plugin_installer.sh
-# Version		: 1.0
+# Version		: 1.1
 # Author		: Tomasz Lipczyński
 # Email			: t.lipczynski@storware.eu
 # Created		: 2026-02-04
@@ -52,7 +52,7 @@ welcome() {
 	echo "        @@@@@@@@  @@@@@@@@@@@@                                                                                                                    "
 	echo "           @@  @@@@@@@@@@@@@                                                                                                                      "
 	echo ""
-	echo -e "${CYAN}vProtect Horizon plugin installator v0.5"
+	echo -e "${CYAN}vProtect Horizon plugin installator v1.1"
 	echo -e "${CYAN}Use ${YELLOW}--help${CYAN} for more information."
 	echo ""
 	echo -e "${NC}"
@@ -79,10 +79,14 @@ menu() {
 get_and_check_kolla_dir() {
 	KOLLA_WORKING_DIR=$(ls -d /var/lib/kolla/venv/lib/python3*/site-packages/openstack_dashboard/ | sort -r | tail -n 1)
 	if ! [[ -n "${KOLLA_WORKING_DIR:-}" ]]; then
-		echo -e "${RED}${BOLD}Kolla working directory not found! ${YELLOW}/var/lib/kolla/venv/lib/python3*/site-packages/openstack_dashboard/${NC}"
-		echo -e "${RED}${BOLD}Is this script running inside the horizon container?${NC}"
-		echo
-		exit 1;
+	  KOLLA_WORKING_DIR=$(ls -d /usr/share/openstack-dashboard/openstack_dashboard/ | sort -r | tail -n 1)
+	  IS_STATIC_FILES_UPDATE=0
+	  if ! [[ -n "${KOLLA_WORKING_DIR:-}" ]]; then
+      echo -e "${RED}${BOLD}Kolla working directory not found! ${YELLOW}/var/lib/kolla/venv/lib/python3*/site-packages/openstack_dashboard/${NC}"
+      echo -e "${RED}${BOLD}Is this script running inside the horizon container?${NC}"
+      echo
+      exit 1;
+		fi
 	fi
 }
 
