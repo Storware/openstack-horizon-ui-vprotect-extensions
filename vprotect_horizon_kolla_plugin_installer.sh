@@ -1,7 +1,7 @@
 #!/bin/bash
 # ====================================================================================
 # Script Name	: vprotect_horizon_kolla_plugin_installer.sh
-# Version		: 1.0
+# Version		: 1.1
 # Author		: Tomasz Lipczyński
 # Email			: t.lipczynski@storware.eu
 # Created		: 2026-02-04
@@ -10,7 +10,7 @@
 # 		  			the horizon pod with kolla.
 # ====================================================================================
 #
-IS_STATIC_FILES_UPDATE=1
+IS_KOLA_ENV=1
 CERTIFICATE_PATH="/tmp/vprotect/vprotect.crt"
 KOLLA_WORKING_DIR=""
 
@@ -52,7 +52,7 @@ welcome() {
 	echo "        @@@@@@@@  @@@@@@@@@@@@                                                                                                                    "
 	echo "           @@  @@@@@@@@@@@@@                                                                                                                      "
 	echo ""
-	echo -e "${CYAN}vProtect Horizon plugin installator v0.5"
+	echo -e "${CYAN}vProtect Horizon plugin installator v1.1"
 	echo -e "${CYAN}Use ${YELLOW}--help${CYAN} for more information."
 	echo ""
 	echo -e "${NC}"
@@ -79,10 +79,14 @@ menu() {
 get_and_check_kolla_dir() {
 	KOLLA_WORKING_DIR=$(ls -d /var/lib/kolla/venv/lib/python3*/site-packages/openstack_dashboard/ | sort -r | tail -n 1)
 	if ! [[ -n "${KOLLA_WORKING_DIR:-}" ]]; then
-		echo -e "${RED}${BOLD}Kolla working directory not found! ${YELLOW}/var/lib/kolla/venv/lib/python3*/site-packages/openstack_dashboard/${NC}"
-		echo -e "${RED}${BOLD}Is this script running inside the horizon container?${NC}"
-		echo
-		exit 1;
+	  KOLLA_WORKING_DIR=$(ls -d /usr/share/openstack-dashboard/openstack_dashboard/ | sort -r | tail -n 1)
+	  IS_KOLA_ENV=0
+	  if ! [[ -n "${KOLLA_WORKING_DIR:-}" ]]; then
+      echo -e "${RED}${BOLD}Kolla working directory not found! ${YELLOW}/var/lib/kolla/venv/lib/python3*/site-packages/openstack_dashboard/${NC}"
+      echo -e "${RED}${BOLD}Is this script running inside the horizon container?${NC}"
+      echo
+      exit 1;
+		fi
 	fi
 }
 
@@ -176,6 +180,18 @@ preinstall_check() {
 	return $invalid_parameters
 }
 
+restart_apache() {
+	echo
+	echo -en "${CYAN}Restarting apache2 in 3 seconds${NC}"
+
+	for i in {3..1}; do
+		echo -n "."
+		sleep 1
+	done
+
+	/etc/init.d/apache2 restart
+}
+
 interactive_install() {
 	clear
 	select_version;
@@ -206,7 +222,7 @@ install() {
 	echo -e "${NC}"
 
 	if ! [[ -n "${plugin_repo_zip_path}" ]]; then
-    if (( IS_STATIC_FILES_UPDATE )); then
+    if (( IS_KOLA_ENV )); then
       git clone https://github.com/Storware/openstack-horizon-ui-vprotect-extensions.git -b caracal
     else
       git clone https://github.com/Storware/openstack-horizon-ui-vprotect-extensions.git
@@ -250,7 +266,7 @@ install() {
 
 	echo -e "PASSWORD: ${sbr_pass}\nREST_API_URL: https://${sbr_hostname}/api\nUSER: ${sbr_user}" > /tmp/vprotect/openstack-horizon-ui-vprotect-extensions/dashboards/vprotect/config.yaml
 
-	if (( IS_STATIC_FILES_UPDATE )); then
+	if (( IS_KOLA_ENV )); then
 		sed -i 's/dashboard\/static/static/g' $(grep -irl "dashboard/static" /tmp/vprotect/openstack-horizon-ui-vprotect-extensions | grep html)
 		cd /tmp/vprotect/vprotect
 		sed -i "s/dashboard\/static\/vprotect/static\/vprotect/g" index.*
@@ -275,16 +291,9 @@ install() {
 	echo -e "${GREEN}${BOLD}Installation completed."
 	sleep 1
 
-	echo
-	echo -en "${CYAN}Restarting apache2 in 3 seconds${NC}"
-
-	for i in {3..1}; do
-		echo -n "."
-		sleep 1
-	done
-
-	/etc/init.d/apache2 restart
-
+	if (( IS_KOLA_ENV )); then
+	  restart_apache;
+	fi
 }
 
 disable_colors() {
@@ -312,15 +321,9 @@ uninstall() {
 	echo
 	echo -e "${GREEN}${BOLD}vProtect plugin uninstalled successfully.${NV}"
 
-	echo
-	echo -en "${CYAN}Restarting apache2 in 3 seconds${NC}"
-
-	for i in {3..1}; do
-		echo -n "."
-		sleep 1
-	done
-
-	/etc/init.d/apache2 restart
+	if (( IS_KOLA_ENV )); then
+	  restart_apache;
+	fi
 
 }
 
