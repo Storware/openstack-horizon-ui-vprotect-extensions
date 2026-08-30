@@ -24,6 +24,7 @@ BLUE='\033[0;34m'
 CYAN='\033[0;36m'
 
 sbr_hostname=''
+sbr_port=''
 sbr_user=''
 sbr_pass=''
 seleted_version=''
@@ -117,8 +118,9 @@ select_version() {
 }
 
 get_sbr_credentials() {
-	echo -e "${CYAN}${BOLD}Type in credentials of SBR and its horizon user account (the one with enabled Horizon plugin access restriction)${NC}"
+	echo -e "${CYAN}${BOLD}Type in details and credentials of SBR and its horizon user account (the one with enabled Horizon plugin access restriction)${NC}"
 	read -p "Type your SBR hostname: " sbr_hostname
+	read -p "Type your SBR port [Default: 443]: " sbr_port
 	read -p "Type your SBR username: " sbr_user
 	read -sp "Type your SBR password: " sbr_pass
 	echo
@@ -126,7 +128,7 @@ get_sbr_credentials() {
 
 get_certificate() {
 	echo -e "${CYAN}${BOLD}Receiving certificate from ${YELLOW}${sbr_hostname}${CYAN}...${NC}"
-	openssl s_client -connect ${sbr_hostname}:443 -showcerts </dev/null \
+	openssl s_client -connect ${sbr_hostname}:${sbr_port} -showcerts </dev/null \
   | sed -ne '/-BEGIN CERTIFICATE-/,/-END CERTIFICATE-/p' > /tmp/vprotect/vprotect.crt
 }
 
@@ -154,6 +156,13 @@ preinstall_check() {
 		echo -e "${GREEN}SBR hostname: ${sbr_hostname}"
 	fi
 
+	if ! [[ -n "${sbr_port:-}" ]]; then
+		echo -e "${YELLOW}SBR port not specified. Using 443 as the default."
+		sbr_port=${sbr_port:-443}
+	else
+		echo -e "${GREEN}SBR port: ${sbr_port}"
+	fi
+	
 	if ! [[ -n "${sbr_user:-}" ]]; then
 		echo -e "${RED}Invalid SBR username! (${sbr_user})"
 		invalid_parameters=1
@@ -264,7 +273,7 @@ install() {
 		exit 1
 	fi
 
-	echo -e "PASSWORD: ${sbr_pass}\nREST_API_URL: https://${sbr_hostname}/api\nUSER: ${sbr_user}" > /tmp/vprotect/openstack-horizon-ui-vprotect-extensions/dashboards/vprotect/config.yaml
+	echo -e "PASSWORD: ${sbr_pass}\nREST_API_URL: https://${sbr_hostname}:${sbr_port}/api\nUSER: ${sbr_user}" > /tmp/vprotect/openstack-horizon-ui-vprotect-extensions/dashboards/vprotect/config.yaml
 
 	if (( IS_KOLA_ENV )); then
 		sed -i 's/dashboard\/static/static/g' $(grep -irl "dashboard/static" /tmp/vprotect/openstack-horizon-ui-vprotect-extensions | grep html)
@@ -341,8 +350,9 @@ Options:
 
 	--uninstall					Uninstalls vProtect horizon plugin
 
-	--non-interactive			Installs the plugin without further interaction with a script - requires the four arguments below:
+	--non-interactive			Installs the plugin without further interaction with a script - requires the arguments below:
 	--sbr-hostname=<host>		IP or hostname of SBR server
+	--sbr-port=<port>			Port of the SBR server. Defaults to 443
 	--sbr-user=<username>		Username for the SBR account with horizon restrictions
 	--sbr-pass=<password>		Password for the SBR account with horizon restrictions
 	--vprotect-version=<ver>	vProtect plugin version to install
@@ -359,13 +369,12 @@ Examples:
   $(basename "$0")
   $(basename "$0") --show-versions
   $(basename "$0") --uninstall
-  $(basename "$0") --non-interactive --sbr-hostname=10.40.14.51 --sbr-user=horizon --sbr-pass=vPr0tect --vprotect-version=7.0.0-3
-  $(basename "$0") --non-interactive --sbr-hostname=10.40.14.51 --sbr-user=horizon --sbr-pass=vPr0tect --static-zip-path=/root/openstack.zip --plugin-repo-zip-path=/root/openstack-horizon-ui-vprotect-extensions-caracal.zip
+  $(basename "$0") --non-interactive --sbr-hostname=10.40.14.51 --sbr-port=8443 --sbr-user=horizon --sbr-pass=vPr0tect --vprotect-version=7.0.0-3
+  $(basename "$0") --non-interactive --sbr-hostname=10.40.14.51 --sbr-port=8443 --sbr-user=horizon --sbr-pass=vPr0tect --static-zip-path=/root/openstack.zip --plugin-repo-zip-path=/root/openstack-horizon-ui-vprotect-extensions-caracal.zip
 EOF
 }
 
-
-ARGS=$(getopt -o h -l sbr-hostname:,sbr-user:,sbr-pass:,vprotect-version:,static-zip-path:,plugin-repo-zip-path:,non-interactive,no-colors,show-versions,uninstall,help -- "$@") || exit 1
+ARGS=$(getopt -o h -l sbr-hostname:,sbr-port:,sbr-user:,sbr-pass:,vprotect-version:,static-zip-path:,plugin-repo-zip-path:,non-interactive,no-colors,show-versions,uninstall,help -- "$@") || exit 1
 eval set -- "$ARGS"
 
 SHOW_VERSIONS=false
@@ -374,6 +383,7 @@ while true; do
     case "$1" in
 		--no-colors) NO_COLORS=true; shift ;;
         --sbr-hostname) sbr_hostname="$2"; shift 2 ;;
+        --sbr-port) sbr_port="$2"; shift 2 ;;
         --sbr-user) sbr_user="$2"; shift 2 ;;
         --sbr-pass) sbr_pass="$2"; shift 2 ;;
         --vprotect-version) selected_version="$2"; shift 2 ;;
